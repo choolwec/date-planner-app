@@ -1,17 +1,21 @@
 {
   "name": "Choolwe & Komana's Date Planner",
-  "short_name": "Date Planner",
+  "short_name": "C+K",
   "description": "Plan, rank, and relive your best dates together.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0B0B14",
-  "theme_color": "#8B5CF6",
-  "orientation": "portrait",
+"theme_color": "#ff6f61",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
