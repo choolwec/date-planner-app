@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="description"
+    content="Choolwe & Komana's ultimate date night planner — plan, rank, and relive your best dates together.">
+  <meta name="theme-color" content="#0B0B14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Date Planner">
+  <title>Choolwe & Komana's Date Planner</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+  <link rel="apple-touch-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header" id="app-header">
+      <h1>Choolwe &amp; Komana's Date Planner</h1>
+      <p class="subtitle">See you next friday</p>
+      <div class="header-names" id="header-names">
+        <span id="header-name1">Choolwe</span>
+        <span class="heart-divider">♥</span>
+        <span id="header-name2">Komana</span>
+      </div>
+      <button class="settings-btn" id="settings-btn" title="Settings" aria-label="Settings">⚙</button>
+    </header>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="btn btn-surprise" id="surprise-btn">🎲 Surprise Me</button>
+      <button class="btn btn-add" id="add-date-btn">+ New Date</button>
+    </div>
+
+    <!-- Active Dates -->
+    <div class="section-title">
+      <span class="icon">🏆</span>
+      <span>Date Rankings</span>
+      <span class="count" id="active-count">5</span>
+    </div>
+    <div class="date-cards" id="date-cards"></div>
+
+    <!-- Completed Dates -->
+    <div class="completed-section">
+      <div class="section-title">
+        <span class="icon">✅</span>
+        <span>Completed</span>
+        <span class="count" id="completed-count">0</span>
+      </div>
+      <div class="completed-cards" id="completed-cards"></div>
+    </div>
+  </div>
+
+  <!-- Onboarding Modal (nicknames only) -->
+  <div class="modal-overlay" id="onboarding-modal">
+    <div class="modal" style="position:relative;">
+      <div class="modal-handle"></div>
+      <div class="onboarding-content">
+        <div class="onboarding-emoji" style="text-align:center;font-size:2.5rem;margin-bottom:12px;">💜</div>
+        <div class="modal-title">Welcome!</div>
+        <p class="modal-subtitle">What do you two call each other?</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="user1-nick">Choolwe's nickname</label>
+            <input class="form-input" id="user1-nick" type="text" placeholder="e.g., Babe" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="user2-nick">Komana's nickname</label>
+            <input class="form-input" id="user2-nick" type="text" placeholder="e.g., Love" maxlength="20">
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" id="onboarding-save">Let's Go! 💜</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Swap Modal -->
+  <div class="modal-overlay" id="swap-modal">
+    <div class="modal" style="position:relative;">
+      <div class="modal-handle"></div>
+      <button class="modal-close" id="swap-close">✕</button>
+      <div class="modal-title">Swap Date</div>
+      <p class="modal-subtitle">Choose a new date to swap in</p>
+      <div class="swap-list" id="swap-list"></div>
+    </div>
+  </div>
+
+  <!-- Rating Modal -->
+  <div class="modal-overlay" id="rating-modal">
+    <div class="modal" style="position:relative;">
+      <div class="modal-handle"></div>
+      <div class="modal-title" id="rating-title">Rate Your Date!</div>
+      <div class="rating-flow" id="rating-flow">
+        <!-- Step 1: Choolwe Rating -->
+        <div class="rating-step active" id="rating-step-1">
+          <p class="rating-prompt" id="rating-prompt-1">What did Choolwe think?</p>
+          <div class="star-rating" id="stars-user1">
+            <button class="star-btn" data-value="1">★</button>
+            <button class="star-btn" data-value="2">★</button>
+            <button class="star-btn" data-value="3">★</button>
+            <button class="star-btn" data-value="4">★</button>
+            <button class="star-btn" data-value="5">★</button>
+          </div>
+          <div class="rating-nav">
+            <button class="btn btn-secondary btn-sm" id="rating-cancel">Cancel</button>
+            <button class="btn btn-primary btn-sm" id="rating-next-1">Next →</button>
+          </div>
+        </div>
+        <!-- Step 2: Komana Rating -->
+        <div class="rating-step" id="rating-step-2">
+          <p class="rating-prompt" id="rating-prompt-2">Now hand it to Komana!</p>
+          <div class="star-rating" id="stars-user2">
+            <button class="star-btn" data-value="1">★</button>
+            <button class="star-btn" data-value="2">★</button>
+            <button class="star-btn" data-value="3">★</button>
+            <button class="star-btn" data-value="4">★</button>
+            <button class="star-btn" data-value="5">★</button>
+          </div>
+          <div class="rating-nav">
+            <button class="btn btn-secondary btn-sm" id="rating-back-2">← Back</button>
+            <button class="btn btn-primary btn-sm" id="rating-next-2">Next →</button>
+          </div>
+        </div>
+        <!-- Step 3: Notes + Photo (optional) -->
+        <div class="rating-step" id="rating-step-3">
+          <p class="rating-prompt">Any memories to save? 💭</p>
+          <textarea class="notes-input" id="rating-notes"
+            placeholder="Write a fun memory, inside joke, or thought... (optional)"></textarea>
+          <div class="photo-upload-area" id="photo-upload-area">
+            <div class="upload-icon">📸</div>
+            <div>Tap to add a photo (optional)</div>
+            <input type="file" id="rating-photo" accept="image/*" capture="environment">
+          </div>
+          <div class="rating-nav">
+            <button class="btn btn-secondary btn-sm" id="rating-back-3">← Back</button>
+            <button class="btn btn-primary btn-sm" id="rating-done">Done! 🎉</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Date Modal -->
+  <div class="modal-overlay" id="edit-date-modal">
+    <div class="modal" style="position:relative;">
+      <div class="modal-handle"></div>
+      <button class="modal-close" id="edit-date-close">✕</button>
+      <div class="modal-title" id="edit-date-title">New Date Idea</div>
+      <p class="modal-subtitle" id="edit-date-subtitle">Create something special</p>
+      <div class="form-group">
+        <label class="form-label" for="edit-date-name">Date Name</label>
+        <input class="form-input" id="edit-date-name" type="text" placeholder="e.g., Sunset Hike" maxlength="40">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-date-desc">Description</label>
+        <input class="form-input" id="edit-date-desc" type="text" placeholder="A short, fun description..."
+          maxlength="100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date Icon (optional)</label>
+        <div class="icon-upload-area" id="icon-upload-area">
+          <div class="upload-text">📷 Tap to upload a custom icon</div>
+          <input type="file" id="edit-date-icon" accept="image/*">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cost Rating</label>
+        <div class="cost-selector" id="cost-selector">
+          <button class="cost-btn" data-cost="1">$</button>
+          <button class="cost-btn" data-cost="2">$$</button>
+          <button class="cost-btn" data-cost="3">$$$</button>
+          <button class="cost-btn" data-cost="4">$$$$</button>
+          <button class="cost-btn" data-cost="5">$$$$$</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="edit-date-save">Save Date</button>
+    </div>
+  </div>
+
+  <!-- Surprise Popup Modal -->
+  <div class="modal-overlay center-modal" id="surprise-modal">
+    <div class="modal" style="position:relative;">
+      <button class="modal-close" id="surprise-close">✕</button>
+      <div class="modal-title">🎲 Surprise Date!</div>
+      <div class="surprise-popup-card" id="surprise-popup-content"></div>
+      <button class="btn btn-primary btn-block" id="surprise-dismiss">Nice! 👌</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal (nicknames only) -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal" style="position:relative;">
+      <div class="modal-handle"></div>
+      <button class="modal-close" id="settings-close">✕</button>
+      <div class="modal-title">Settings</div>
+      <p class="modal-subtitle">Update your nicknames</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="set-user1-nick">Choolwe's nickname</label>
+          <input class="form-input" id="set-user1-nick" type="text" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="set-user2-nick">Komana's nickname</label>
+          <input class="form-input" id="set-user2-nick" type="text" maxlength="20">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="settings-save">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Edit Completed Modal -->
+  <div class="modal-overlay" id="edit-completed-modal">
+    <div class="modal" style="position:relative;">
+      <div class="modal-handle"></div>
+      <button class="modal-close" id="edit-completed-close">✕</button>
+      <div class="modal-title" id="edit-completed-title">Edit Completed Date</div>
+      <div class="rating-flow">
+        <div class="form-group">
+          <label class="form-label">Choolwe's Rating</label>
+          <div class="star-rating" id="edit-stars-user1">
+            <button class="star-btn" data-value="1">★</button>
+            <button class="star-btn" data-value="2">★</button>
+            <button class="star-btn" data-value="3">★</button>
+            <button class="star-btn" data-value="4">★</button>
+            <button class="star-btn" data-value="5">★</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Komana's Rating</label>
+          <div class="star-rating" id="edit-stars-user2">
+            <button class="star-btn" data-value="1">★</button>
+            <button class="star-btn" data-value="2">★</button>
+            <button class="star-btn" data-value="3">★</button>
+            <button class="star-btn" data-value="4">★</button>
+            <button class="star-btn" data-value="5">★</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea class="notes-input" id="edit-completed-notes" placeholder="Update your memory..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Photo</label>
+          <div class="photo-upload-area" id="edit-completed-photo-area">
+            <div class="upload-icon">📸</div>
+            <div>Tap to change photo</div>
+            <input type="file" id="edit-completed-photo" accept="image/*">
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" id="edit-completed-save">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Lightbox -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <button class="lightbox-close" id="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt="Date photo">
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+  <div class="confetti-container" id="confetti-container"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
